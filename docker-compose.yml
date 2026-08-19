@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  ignite-node-a-1:
+    image: apacheignite/ignite:2.18.0
+    container_name: ignite-node-a-1
+    networks:
+      - ignite-network
+      - shared-network
+    environment:
+      - OPTION_LIBS=ignite-log4j2
+#      - OPTION_LIBS=ignite-log4j2
+      - CONFIG_URI=/opt/ignite/apache-ignite/config/cdc-config.xml
+    ports:
+      - "10800:10800"
+      - "8080:8080"
+    volumes:
+      - ./cdc-config.xml:/opt/ignite/apache-ignite/config/cdc-config.xml
+      - ./ignite-config.xml:/opt/ignite/apache-ignite/config/ignite-config.xml
+      - ./libs:/opt/ignite/apache-ignite/libs/sar
+#      - ./libs/ignite-cdc-ext-1.0.0.jar:/opt/ignite/apache-ignite/libs/ignite-cdc-ext-1.0.0.jar
+#      - ./libs/kafka-clients-3.2.0.jar:/opt/libs/kafka-clients-3.2.0.jar
+#  ./apache-ignite/bin/ignite-cdc.sh -v /opt/ignite/apache-ignite/config/cdc-config.xml
+
+  ignite-node-a-2:
+    image: apacheignite/ignite:2.18.0
+    container_name: ignite-node-a-2
+    networks:
+      - ignite-network
+      - shared-network
+    environment:
+#      - OPTION_LIBS=ignite-log4j2,ignite-cdc-ext
+      - OPTION_LIBS=ignite-log4j2
+      - CONFIG_URI=/opt/ignite/apache-ignite/config/cdc-config.xml
+    volumes:
+      - ./ignite-config.xml:/opt/ignite/apache-ignite/config/ignite-config.xml
+      - ./cdc-config.xml:/opt/ignite/apache-ignite/config/cdc-config.xml
+      - ./libs:/opt/ignite/apache-ignite/libs/sar
+#      - ./libs/ignite-cdc-ext-1.0.0.jar:/opt/ignite/apache-ignite/libs/ignite-cdc-ext-1.0.0.jar
+
+  ignite-node-a-3:
+    image: apacheignite/ignite:2.18.0
+    container_name: ignite-node-a-3
+    networks:
+      - ignite-network
+      - shared-network
+    environment:
+      - OPTION_LIBS=ignite-log4j2
+#      - OPTION_LIBS=ignite-log4j2
+      - CONFIG_URI=/opt/ignite/apache-ignite/config/cdc-config.xml
+    volumes:
+      - ./ignite-config.xml:/opt/ignite/apache-ignite/config/ignite-config.xml
+      - ./cdc-config.xml:/opt/ignite/apache-ignite/config/cdc-config.xml
+      - ./libs:/opt/ignite/apache-ignite/libs/sar
+#      - ./libs/ignite-cdc-ext-1.0.0.jar:/opt/ignite/apache-ignite/libs/ignite-cdc-ext-1.0.0.jar
+
+networks:
+  ignite-network:
+    driver: bridge
+  shared-network:
+    external: true

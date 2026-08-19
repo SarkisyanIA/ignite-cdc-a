@@ -1,0 +1,102 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+<!--        <property name="igniteInstanceName" value="ignite-node-a-1" />-->
+<!--        <property name="consistentId" value="ignite-node-a-1" />-->
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <value>ignite-node-a-1:47500..47509</value>
+                                <value>ignite-node-a-2:47500..47509</value>
+                                <value>ignite-node-a-3:47500..47509</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <property name="dataStorageConfiguration">
+            <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                <property name="defaultDataRegionConfiguration">
+                    <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                        <property name="persistenceEnabled" value="true" />
+                        <property name="cdcEnabled" value="true" />
+                    </bean>
+                </property>
+                <property name="walForceArchiveTimeout" value="5000"/>
+<!--                <property name="cdcWalPath" value="db/wal/cdc"/>-->
+            </bean>
+        </property>
+
+
+        <property name="cacheConfiguration">
+            <list>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="atomicityMode" value="ATOMIC"/>
+                    <property name="name" value="CDC_TEST1"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.apache.ignite.cdc.CdcConfiguration">
+        <property name="consumer">
+            <bean class="org.apache.ignite.cdc.kafka.IgniteToKafkaCdcStreamer">
+                <!-- Настройки подключения к Kafka -->
+                <property name="kafkaProperties">
+                    <props>
+                        <prop key="bootstrap.servers">kafka:9092</prop>
+                        <prop key="request.timeout.ms">10000</prop> <!-- Обязательный параметр -->
+                        <prop key="group.id">ignite_cdc_applier_group</prop>
+                        <prop key="auto.offset.reset">earliest</prop>
+                        <prop key="enable.auto.commit">false</prop>
+                        <prop key="key.deserializer">org.apache.kafka.common.serialization.ByteArrayDeserializer</prop>
+                        <prop key="value.deserializer">org.apache.kafka.common.serialization.ByteArrayDeserializer</prop>
+                    </props>
+                </property>
+                <property name="kafkaPartitions" value="1" />
+                <!-- Имена топиков -->
+                <property name="topic" value="ignite_cdc_data"/>
+                <property name="metadataTopic" value="ignite_cdc_meta"/> <!-- Должен иметь 1 партицию -->
+
+                <!-- Целевые кеши -->
+                <property name="caches">
+                    <list>
+                        <value>CDC_TEST1</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+<!--    <bean class="org.apache.ignite.cdc.CdcConfiguration">-->
+<!--        <property name="consumer">-->
+<!--            <bean class="org.apache.ignite.cdc.thin.IgniteToIgniteClientCdcStreamer">-->
+<!--                <property name="destinationClientConfiguration">-->
+<!--                    <bean class="org.apache.ignite.configuration.ClientConfiguration">-->
+<!--                        <property name="addresses">-->
+<!--                            <list>-->
+<!--                                &lt;!&ndash; Список адресов кластера-получателя. &ndash;&gt;-->
+<!--                                <value>ignite-node-b-1:10810</value>-->
+<!--                            </list>-->
+<!--                        </property>-->
+<!--                    </bean>-->
+<!--                </property>-->
+<!--            </bean>-->
+<!--        </property>-->
+<!--        <property name="caches">-->
+<!--            <list>-->
+<!--                <value>CDC_TEST1</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
+</beans>
