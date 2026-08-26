@@ -28,7 +28,7 @@ status VARCHAR(20),
 created_date TIMESTAMP,
 updated_date TIMESTAMP,
 PRIMARY KEY (id)
-) WITH "CACHE_NAME=CDC_TEST1, TEMPLATE=PARTITIONED";
+) WITH "CACHE_NAME=CDC_TEST1, TEMPLATE=PARTITIONED, VALUE_TYPE=SQL_CDC_TEST1_TYPE";
 
 4. Поднять кластер Ignite b
 
@@ -67,4 +67,9 @@ PRIMARY KEY (id)
 
 8. Запустить один раз ./kafka-to-ignite.sh на любой ноде Passive кластера
 
-> docker-compose exec -it ignite-node-b-1 ./apache-ignite/bin/kafka-to-ignite.sh --broker kafka:9092 --topic ignite_cdc_data --igniteAddress /opt/ignite/apache-ignite/config/kafka-config.xml
+>  docker-compose exec -it ignite-node-b-1 ./apache-ignite/bin/kafka-to-ignite.sh -v /opt/ignite/apache-ignite/config/kafka-config.xml
+
+9. Вставляем тестовую запись в Ignite a
+
+> INSERT INTO CDC_TEST1 (id, name, value, status, created_date, updated_date)
+VALUES (1, 'Товар А', 1500.50, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

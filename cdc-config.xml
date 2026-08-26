@@ -7,6 +7,16 @@
     <bean class="org.apache.ignite.configuration.IgniteConfiguration">
 <!--        <property name="igniteInstanceName" value="ignite-node-a-1" />-->
 <!--        <property name="consistentId" value="ignite-node-a-1" />-->
+<!--        <bean class="org.apache.ignite.configuration.IgniteConfiguration">-->
+<!--            <property name="igniteInstanceName" value="${server_instance_name}"/>-->
+<!--            <property name="consistentId" value="${server_instance_name}"/>-->
+<!--            <property name="localHost" value="${server_host}"/>-->
+<!--            <property name="discoverySpi" ref="ignTcpDiscoverySpi"/>-->
+<!--            <property name="dataStorageConfiguration" ref="ignDataStorageConfiguration"/>-->
+<!--            <property name="pluginProviders" ref="ignCacheVersionConflictResolverPluginProvider"/>-->
+<!--            <property name="cacheConfiguration" ref="ignCacheConfiguration"/>-->
+<!--            <property name="clientConnectorConfiguration" ref="ignClientConnectorConfiguration"/>-->
+<!--        </bean>-->
 
         <property name="discoverySpi">
             <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
@@ -59,11 +69,11 @@
                         <prop key="group.id">ignite_cdc_applier_group</prop>
                         <prop key="auto.offset.reset">earliest</prop>
                         <prop key="enable.auto.commit">false</prop>
-                        <prop key="key.deserializer">org.apache.kafka.common.serialization.ByteArrayDeserializer</prop>
-                        <prop key="value.deserializer">org.apache.kafka.common.serialization.ByteArrayDeserializer</prop>
+<!--                        <prop key="key.deserializer">org.apache.kafka.common.serialization.ByteArrayDeserializer</prop>-->
+<!--                        <prop key="value.deserializer">org.apache.kafka.common.serialization.ByteArrayDeserializer</prop>-->
                     </props>
                 </property>
-                <property name="kafkaPartitions" value="1" />
+                <property name="kafkaPartitions" value="3" />
                 <!-- Имена топиков -->
                 <property name="topic" value="ignite_cdc_data"/>
                 <property name="metadataTopic" value="ignite_cdc_meta"/> <!-- Должен иметь 1 партицию -->
@@ -74,6 +84,8 @@
                         <value>CDC_TEST1</value>
                     </list>
                 </property>
+
+                <property name="maxBatchSize" value="1024"/>
             </bean>
         </property>
     </bean>
