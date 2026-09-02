@@ -1,9 +1,9 @@
 # Войти в контейнер Kafka
->docker exec -it kafka bash
+> docker exec -it kafka bash
 
 > cd /opt/kafka/bin
 
-# Создаем основной топик для данных (несколько партиций для параллельной обработки)
+# Создаем основной топик для данных (несколько партиций для параллельной обработки) (в нашем случае мы прописали все в компоусе, шаг пропустить)
 >./kafka-topics.sh --create \
 --topic ignite_cdc_data \
 --bootstrap-server localhost:9092 \
@@ -12,21 +12,21 @@
 --config retention.ms=604800000 \
 --config segment.bytes=1073741824
 
-# Создаем мета-топик (строго 1 партиция!)
+# Создаем мета-топик (строго 1 партиция!)  (в нашем случае мы прописали все в компоусе, шаг пропустить)
 >./kafka-topics.sh --create \
 --topic ignite_cdc_meta \
 --bootstrap-server localhost:9092 \
 --partitions 1 \
 --replication-factor 1 \
 --config retention.ms=2592000000 \
---config cleanup.policy=compact
+--config cleanup.policy=compact # не уверен что топик нужен компактный, на подумать
 
 # Проверить созданные топики
 >./kafka-topics.sh --list --bootstrap-server localhost:9092
 
-или
+или через UI
 
-http://localhost:8088/
+> http://localhost:8088/
 
 # Получить детальную информацию о топиках
 >./kafka-topics.sh --describe --topic ignite_cdc_data --bootstrap-server localhost:9092
