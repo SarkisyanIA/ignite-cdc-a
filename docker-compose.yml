@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   ignite-node-a-1:
-    image: apacheignite/ignite:2.15.0
+    image: apacheignite/ignite:2.19.0 # or apacheignite/ignite:2.15.0
     container_name: ignite-node-a-1
     networks:
       - ignite-network
@@ -23,7 +23,7 @@ services:
 #  ./apache-ignite/bin/ignite-cdc.sh -v /opt/ignite/apache-ignite/config/cdc-config.xml
 
   ignite-node-a-2:
-    image: apacheignite/ignite:2.15.0
+    image: apacheignite/ignite:2.19.0 # or apacheignite/ignite:2.15.0
     container_name: ignite-node-a-2
     networks:
       - ignite-network
@@ -39,7 +39,7 @@ services:
 #      - ./libs/ignite-cdc-ext-1.0.0.jar:/opt/ignite/apache-ignite/libs/ignite-cdc-ext-1.0.0.jar
 
   ignite-node-a-3:
-    image: apacheignite/ignite:2.15.0
+    image: apacheignite/ignite:2.19.0 # or apacheignite/ignite:2.15.0
     container_name: ignite-node-a-3
     networks:
       - ignite-network
