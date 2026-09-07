@@ -66,7 +66,7 @@
                     <props>
                         <prop key="bootstrap.servers">kafka:9092</prop>
                         <prop key="request.timeout.ms">10000</prop> <!-- Обязательный параметр -->
-                        <prop key="group.id">ignite_cdc_applier_group</prop>
+                        <prop key="group.id">ignite_cdc_applier_group_1</prop>
                         <prop key="auto.offset.reset">earliest</prop>
                         <prop key="enable.auto.commit">false</prop>
 <!--                        <prop key="key.deserializer">org.apache.kafka.common.serialization.ByteArrayDeserializer</prop>-->
@@ -75,8 +75,8 @@
                 </property>
                 <property name="kafkaPartitions" value="3" />
                 <!-- Имена топиков -->
-                <property name="topic" value="ignite_cdc_data"/>
-                <property name="metadataTopic" value="ignite_cdc_meta"/> <!-- Должен иметь 1 партицию -->
+                <property name="topic" value="ignite_cdc_data_1"/>
+                <property name="metadataTopic" value="ignite_cdc_meta_1"/> <!-- Должен иметь 1 партицию -->
 
                 <!-- Целевые кеши -->
                 <property name="caches">
@@ -88,6 +88,16 @@
                 <property name="maxBatchSize" value="1024"/>
             </bean>
         </property>
+    </bean>
+
+    <bean id="ignCacheVersionConflictResolverPluginProvider" class="org.apache.ignite.cdc.conflictresolve.CacheVersionConflictResolverPluginProvider">
+        <property name="caches">
+            <set>
+                <value>CDC_TEST1</value>
+            </set>
+        </property>
+
+        <property name="clusterId" value="1"/>
     </bean>
 
 <!--    <bean class="org.apache.ignite.cdc.CdcConfiguration">-->

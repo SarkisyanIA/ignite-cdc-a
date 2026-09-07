@@ -6,7 +6,7 @@
 
 1. Перейти в директорию kafka
 
-> C:\Users\Ishkhan\IdeaProjects\ignite-cdc-a\kafka
+> cd C:\Users\Ishkhan\IdeaProjects\ignite-cdc-a\kafka
 
 2. Поднять брокер сообщения Kafka
 

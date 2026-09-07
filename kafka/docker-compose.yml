@@ -23,7 +23,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "ignite_cdc_data:3:1,ignite_cdc_meta:1:1"
+      KAFKA_CREATE_TOPICS: "ignite_cdc_data_1:3:1,ignite_cdc_meta_1:1:1,ignite_cdc_data_2:3:1,ignite_cdc_meta_2:1:1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT # опционально
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # опционально
