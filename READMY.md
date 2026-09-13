@@ -85,6 +85,20 @@ PRIMARY KEY (id)
 > INSERT INTO CDC_TEST1 (id, name, value, status, created_date, updated_date)
 VALUES (1, 'Товар А', 1500.50, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+### Полезные команды 
+#### Для проверки портов
+> netstat -tulpn
+> ps aux | grep 9113
+> ps aux | grep ignite-cdc
+
+#### Правильный запуск вторых потоков для cdc. ignite-cdc.sh и kafka-to-ignite.sh 
+> docker-compose exec -it ignite-node-a-1 sh -c "JVM_OPTS='-Dcom.sun.management.jmxremote=false' ./apache-ignite/bin/ignite-cdc.sh config/cdc-config.xml"
+
+#### Просмотр java процессов внутри контейнера с параметрами
+> docker-compose exec ignite-node-a-1 sh -c "ps -ef | grep '[j]ava'"
+
+![img_2.png](img_2.png)
+
 ### Пример различий ignite 2.15 и ignite 2.18
 > 
 > 
